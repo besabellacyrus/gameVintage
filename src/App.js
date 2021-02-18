@@ -1,5 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
+import './components/index.scss';
 import './assets/common/scss/main.scss'
 import {
   BrowserRouter as Router,
@@ -10,84 +11,133 @@ import {
   useHistory,
   useLocation
 } from "react-router-dom";
-import React, { Component, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import queryString from 'query-string';
-import qs from 'querystring';
-import axios from 'axios'; 
-import { Home } from './components/Home';
-const {
-  REACT_APP_API_BASE_URL
-} = process.env;
+import useApi from './api';
+import { Home } from './components/Home'; 
+import { formatMoney, parseNumbers } from './utils/numbers';
 
 const App = () => {
   const location = useLocation();
-  let history = useHistory();
-  const language = 'en';
-  const userId = 'BPK35058560571';
-  const gameId = 'SL24';
-  const launcher = 'PARLAY2';
-  const mobile = 'no';
-  const passThrough = `{"helpUrl":"https:bpkdev.parlaygames.nethow-to-play#videoslots?param1=TTT3","homeURL":"https:bpkdev.parlaygames.net"}`
-  const API_URL = 'gameserver/CasinoServlet';
-  const headers = {
-    'Content-Type': 'application/x-www-form-urlencoded'
-  };
-  useEffect(() => {
-    
-    const payloadParams = `/GameLaunchServlet?LANGUAGE=${language}&USERID=${userId}&MOBILE=${mobile}&GAMEID=${gameId}&LAUNCHER=${launcher}&PASSTHROUGH=${passThrough}`;
-    history.push({
-      search: payloadParams
-    });
-    axios.post(REACT_APP_API_BASE_URL+ payloadParams, 
-      queryString.stringify({
-        USERNUM: '5782518ECBF5D2CB0B55584F09421866',
-        CONFIGID: 24,
-        TRANTYPE: 'GAMELOGIN',
-        USERID: 'BPK35058560571',
-        GAMETYPE: 'SL',
-        VERSION: 'FLASH'
-      }) , { headers }).then(res => {
-        const config = res.config.data.split('&');
-        let configs = {}
-        config.forEach((e, i)=> {
-          const www = e.split("=")
-          configs[www[0]] = www[1]
-          console.log({ www })
-        })
-      // console.log({ configs, res })
-      if (configs !== {}) {
-        getConfig(configs);
-      }
-    }).catch(err => {
-      console.log({ err })
-    });
-  }, []);
+  const urlParams = queryString.parse(location.search); 
+  const USERNUM = urlParams.SESSIONID;
+  const USERID = urlParams.USERID;
+  const SESSIONID = urlParams.SESSIONID;
+  const GAMEID = urlParams.GAMEID;
+  const api = useApi();
+  const [numberRounds, setNumberRounds] = useState([]);
+  const [gameNumbers, setGameNumbers] = useState([]);
+  const [spinData, setSpinData] = useState({});
+  const [errorState, setErrorState] = useState(false);
 
-  const getConfig = (payload) => {
-    console.log({ payload });
-    axios.post(REACT_APP_API_BASE_URL+ '/CasinoServlet', 
-      queryString.stringify({
-        USERNUM: payload.USERNUM,
-        CONFIGID: payload.CONFIGID,
-        TRANTYPE: 'GETCONFIG',
-        USERID: payload.USERID,
-        GAMETYPE: payload.GAMETYPE,
-        VERSION: payload.VERSION
-      }) , { headers }).then(res => {
-         console.log({ getConfig: res })
-    }).catch(err => {
-      console.log({ err })
+  // const [next, setNext] = useState(1);
+  const [gameState, setGameState] = useState({
+    isGamePlaying: false,
+    currentRound: -1,
+    ACCOUNTVALUE: 0,
+    DRAWS: 1, 
+  });
+ 
+  useEffect(() => {
+    initializeGame();
+  },[])
+
+  useEffect(() => {
+    console.log({ theError: errorState })
+  },[errorState])
+  
+  const initializeGame = async () => { 
+    const game = await api.gameLogin({USERNUM, USERID, CONFIGID: 24 });
+    const config = await api.getConfig({
+        GAMEID: game.GAMEID,
+        USERNUM,
+        USERID
+    }); 
+
+    setGameState({
+      ...gameState,
+      ...config,
+      ...game,
+      USERNUM,
+      USERID,
     });
+    
+    console.log({ config, gameState, game })
+    getGameCounterData(game);
+  } 
+
+  const getAndFollowGameState = async (game, next) => {
+    const gamestate = await api.getState({
+        GAMEID: game.GAMEID,
+        GAMETYPE: 'SL',
+        CONFIGID: '24',
+        USERNUM,
+        USERID,
+        TRANTYPE: 'GETSTATE'
+      }, next); 
+    
+      console.warn({ thegame: game }) 
+    console.log({ gggg: gamestate, next })
+    if (gamestate['AC'+next]) {
+      switch (gamestate['AC'+next]) {
+        case 'SPIN': 
+          const spin  = await api.casinoServlet({
+            BETLINES: gamestate.BETLINES,
+            USERNUM: USERNUM,
+            GAMETYPE: 'SL',
+            DENOM: gamestate.DENOM,
+            USERID: USERID,
+            GAMEID: game.GAMEID,
+            TRANTYPE: 'SPIN',
+            BET: gamestate.BET,
+            LASTWAGERTYPE: gamestate.WAGERTYPE
+        })
+
+          console.log({ spin })  
+          if (spin.WON) {
+            setSpinData(spin)
+            getAndFollowGameState(game, next + 1)
+          }
+          break;
+        case 'WIN':
+        case 'LOSE':
+          getAndFollowGameState(game, next + 1)
+          break;
+        default:
+          console.log({ default: gamestate })
+          break;
+      }
+    } else {
+      // send to client 
+    }
   }
 
-  const urlParams = queryString.parse(location.search);
-  console.log({ urlParams, location, history })
+  const getGameCounterData = async (game) => {
+    const gameCounter = await api.getGameCounter({
+      GAMEID: game.GAMEID,
+      USERNUM,
+      USERID,
+    }); 
+
+    if (gameCounter['ERROR']) {
+      console.log({ gameCounterError: gameCounter })
+      setErrorState(gameCounter)
+      return;
+    }
+
+    console.log({ gameCounter })
+
+    getAndFollowGameState(game, 1); 
+  } 
+  
 
   return ( 
     <main>
-        <Switch>
-          <Route path='/' component={Home} />
-        </Switch>
+      { !errorState ? (
+        <Home gameState={gameState} spinData={spinData}></Home>
+      ) :
+        <div>Error</div>
+      }
     </main>
   );
 }
