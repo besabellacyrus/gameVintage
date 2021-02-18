@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useApi from '../api';
+import useSound from 'use-sound';
 import { Header } from './Header';
+import spinSound from '../assets/sounds/Spin.mp3';
 
 export const Home = ({ gameState, spinData }) => {
     const [gamestate, setgamestate] = useState({})
@@ -11,7 +13,7 @@ export const Home = ({ gameState, spinData }) => {
     const [spinning, setspinning] = useState(false);
     const [selectedDenom, setselecteddenom] = useState("");
     const [loading, setloading] = useState(true);
-
+    const [play] = useSound(spinSound);
 
 
     const myStyle1 = {
@@ -184,8 +186,8 @@ export const Home = ({ gameState, spinData }) => {
 
     const highlightBetline = (data) => {
         const b0 = document.getElementById('payline-0');
-        const b1 = document.getElementById('payline-1');
-        const b2 = document.getElementById('payline-2');
+        const b1 = document.getElementById('payline-2');
+        const b2 = document.getElementById('payline-1');
         const b3 = document.getElementById('payline-3');
         const b4 = document.getElementById('payline-4');
 
@@ -217,6 +219,7 @@ export const Home = ({ gameState, spinData }) => {
     }
 
     const spin = async (betline = 0) => {
+        play();
         let bets = gamestate.NUMPAYLINES;
 
         if (betline === 5) {
@@ -483,7 +486,7 @@ export const Home = ({ gameState, spinData }) => {
                         </div>
                     </div>
                     <div className="paylines-container">
-                        <svg id="payline-4" height="250" width="500" style={{
+                        <svg id="payline-3" height="250" width="500" style={{
                             'position': 'absolute',
                             zIndex: 999,
                         }}>
@@ -492,7 +495,7 @@ export const Home = ({ gameState, spinData }) => {
                                 strokeWidth: 2
                             }}></line>
                         </svg>
-                        <svg id="payline-1" height="250" width="500" style={{
+                        <svg id="payline-2" height="250" width="500" style={{
                             'position': 'absolute',
                             zIndex: 999,
                             top: 36
@@ -512,7 +515,7 @@ export const Home = ({ gameState, spinData }) => {
                                 strokeWidth:3
                             }}></line>
                         </svg>
-                        <svg id="payline-2" height="250" width="500" style={{
+                        <svg id="payline-1" height="250" width="500" style={{
                             'position': 'absolute',
                             zIndex: 999,
                             top: 195
@@ -522,7 +525,7 @@ export const Home = ({ gameState, spinData }) => {
                                 strokeWidth: 3
                             }}></line>
                         </svg>
-                        <svg id="payline-3" height="250" width="500" style={{
+                        <svg id="payline-4" height="250" width="500" style={{
                             'position': 'absolute',
                             zIndex: 999,
                         }}>
