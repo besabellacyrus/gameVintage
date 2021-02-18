@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import useApi from '../api';
 import { Header } from './Header';
 
-export const Home = ({ gameState, spinData }) => { 
+export const Home = ({ gameState, spinData }) => {
     const [gamestate, setgamestate] = useState({})
     const [wheelZero, setwheelZero] = useState([])
     const [wheelOne, setwheelOne] = useState([])
@@ -12,7 +12,7 @@ export const Home = ({ gameState, spinData }) => {
     const [selectedDenom, setselecteddenom] = useState("");
     const [loading, setloading] = useState(true);
 
-    
+
 
     const myStyle1 = {
         transform: 'rotateX(30deg) translateZ(200px)'
@@ -59,18 +59,18 @@ export const Home = ({ gameState, spinData }) => {
     const ringTwo = useRef(null);
     const ringThree = useRef(null);
 
-    const api = useApi(); 
+    const api = useApi();
 
     useEffect(() => {
-        setloading(true);
+        setloading(false);
     }, [])
 
-    useEffect(() => { 
+    useEffect(() => {
         const spinWheels = spinData.WHEELVALUES
         const wheelZero = spinData.WHEEL0
         const wheelOne = spinData.WHEEL1
-        const wheelTwo = spinData.WHEEL2 
-        
+        const wheelTwo = spinData.WHEEL2
+
         setReels({
             wheels: spinWheels,
             wheelZero,
@@ -82,22 +82,22 @@ export const Home = ({ gameState, spinData }) => {
         if (wheelTwo) {
             if (spinData.WHEELVALUES) {
                 setTimeout(() => {
-                    setloading(false); 
+                    setloading(true);
                 }, 1000);
-            } 
+            }
         }
     }, [spinData])
 
-    useEffect(() => { 
+    useEffect(() => {
         if (gameState.DENOM) {
             const gameDenoms = gameState.DENOM.split(',');
             setdenoms(gameDenoms)
             setselecteddenom(gameDenoms[0])
         }
         console.log({ gameState2232: gameState })
-        setgamestate(gameState) 
+        setgamestate(gameState)
     }, [gameState])
- 
+
 
     const getWheelChunk = (data) => {
         let i,j,temparray,chunk = 3;
@@ -109,8 +109,8 @@ export const Home = ({ gameState, spinData }) => {
         console.log({ wheelsChunks })
         return wheelsChunks
     }
- 
-    const handleBetLine = (betline = 0) => { 
+
+    const handleBetLine = (betline = 0) => {
         let paylines = gamestate.NUMPAYLINES
         if (betline === 5) {
             paylines = betline
@@ -119,7 +119,7 @@ export const Home = ({ gameState, spinData }) => {
                 paylines ++
             } else {
                 paylines = 1
-            } 
+            }
         }
         console.log({ paylines})
         const b0 = document.getElementById('payline-0');
@@ -133,7 +133,7 @@ export const Home = ({ gameState, spinData }) => {
         b2.lastChild.style.strokeWidth = 3
         b3.lastChild.style.strokeWidth = 3
         b4.lastChild.style.strokeWidth = 3
- 
+
         switch (paylines) {
             case 1:
                 b1.style.display = 'none';
@@ -172,8 +172,8 @@ export const Home = ({ gameState, spinData }) => {
             default:
                 b0.style.display = 'initial';
                 break;
-        } 
-        
+        }
+
         setgamestate(
             {
                 ...gameState,
@@ -258,8 +258,8 @@ export const Home = ({ gameState, spinData }) => {
         const spinWheels = spind.WHEELVALUES
         const wheelZero = spind.WHEEL0
         const wheelOne = spind.WHEEL1
-        const wheelTwo = spind.WHEEL2 
- 
+        const wheelTwo = spind.WHEEL2
+
         let i,j,temparray,chunk = 3;
         let wheelsChunks = []
         for (i=0,j=spinWheels.length; i<j; i+=chunk) {
@@ -289,15 +289,15 @@ export const Home = ({ gameState, spinData }) => {
                     )
                     setspinning(false);
                 }, 1500);
-                oneRef.current.innerHTML = wheelsChunks[wheelZero][0]
-                twoRef.current.innerHTML = wheelsChunks[wheelZero][1]
-                threeRef.current.innerHTML = wheelsChunks[wheelZero][2]
+                // oneRef.current.innerHTML = wheelsChunks[wheelZero][0]
+                // twoRef.current.innerHTML = wheelsChunks[wheelZero][1]
+                // threeRef.current.innerHTML = wheelsChunks[wheelZero][2]
             }, 1000);
         }
         setwheelZero(wheelsChunks[wheelZero])
         setwheelOne(wheelsChunks[wheelOne])
         setwheelTwo(wheelsChunks[wheelTwo])
-        console.log({ clickedSpin: spind }) 
+        console.log({ clickedSpin: spind })
     }
 
     const setReels = (data) => {
@@ -310,7 +310,7 @@ export const Home = ({ gameState, spinData }) => {
                 wheelsChunks.push(temparray)
             }
             console.log({ wheelsChunks })
-            
+
             setwheelZero(wheelsChunks[data.wheelZero])
             setwheelOne(wheelsChunks[data.wheelOne])
             setwheelTwo(wheelsChunks[data.wheelTwo])
@@ -348,19 +348,19 @@ export const Home = ({ gameState, spinData }) => {
     }
 
     return (
-        <> 
-        <div className="home">  
+        <>
+        <div className="home">
             <Header headerData={gamestate}></Header>
             <div className="app-logo-container">
-                <div className="app-logo"></div>   
-            </div> 
-            <div className="reels-container"> 
+                <div className="app-logo"></div>
+            </div>
+            <div className="reels-container">
                 <div className="reels">
                     <div className="stage">
                         <div className="rotate">
                             <div className="ring ring-1" id="ring-1" ref={ringOne}>
                                 <div className={ `poster ` + wheelZero[0] } style={myStyle1}>
-                                    <p ref={oneRef}></p>
+                                    <p>{wheelZero[0]}</p>
                                 </div>
                                 <div className="poster b" style={myStyle2}>
                                     <p></p>
@@ -389,12 +389,12 @@ export const Home = ({ gameState, spinData }) => {
                                 <div className="poster j" style={myStyle10}>
                                     <p></p>
                                 </div>
-                                <div className={ `poster ` + wheelZero[1] }  style={myStyle11}>
-                                    <p ref={twoRef}></p>
-                                </div> 
-                                <div className={ `poster ` + wheelZero[2] } style={myStyle12}>
-                                    <p ref={threeRef}></p>
-                                </div> 
+                                <div className={ `poster ` + wheelZero[2] }  style={myStyle11}>
+                                    <p>{wheelZero[2]}</p>
+                                </div>
+                                <div className={ `poster ` + wheelZero[1] } style={myStyle12}>
+                                    <p>{wheelZero[1]}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -431,12 +431,12 @@ export const Home = ({ gameState, spinData }) => {
                                 <div className="poster j" style={myStyle10}>
                                     <p></p>
                                 </div>
-                                <div className={ `poster ` + wheelOne[1] }  style={myStyle11}>
-                                    <p> {wheelOne[1]}</p>
-                                </div> 
-                                <div className={ `poster ` + wheelOne[2] } style={myStyle12}>
-                                    <p>{wheelOne[2]}</p>
-                                </div> 
+                                <div className={ `poster ` + wheelOne[2] }  style={myStyle11}>
+                                    <p> {wheelOne[2]}</p>
+                                </div>
+                                <div className={ `poster ` + wheelOne[1] } style={myStyle12}>
+                                    <p>{wheelOne[1]}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -473,19 +473,19 @@ export const Home = ({ gameState, spinData }) => {
                                 <div className="poster j" style={myStyle10}>
                                     <p></p>
                                 </div>
-                                <div className={ `poster ` + wheelTwo[1] }  style={myStyle11}>
-                                    <p>{ wheelTwo[1] }</p>
-                                </div> 
-                                <div className={ `poster ` + wheelTwo[2] } style={myStyle12}>
+                                <div className={ `poster ` + wheelTwo[2] }  style={myStyle11}>
                                     <p>{ wheelTwo[2] }</p>
-                                </div> 
+                                </div>
+                                <div className={ `poster ` + wheelTwo[1] } style={myStyle12}>
+                                    <p>{ wheelTwo[1] }</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div className="paylines-container">
                         <svg id="payline-4" height="250" width="500" style={{
                             'position': 'absolute',
-                            zIndex: 999, 
+                            zIndex: 999,
                         }}>
                             <line x1="0" y1="0" x2="360" y2="241" style={{
                                 stroke: 'rgb(255,0,0)',
@@ -494,7 +494,7 @@ export const Home = ({ gameState, spinData }) => {
                         </svg>
                         <svg id="payline-1" height="250" width="500" style={{
                             'position': 'absolute',
-                            zIndex: 999, 
+                            zIndex: 999,
                             top: 36
                         }}>
                             <line x1="0" y1="0" x2="360" y2="0" style={{
@@ -504,7 +504,7 @@ export const Home = ({ gameState, spinData }) => {
                         </svg>
                         <svg id="payline-0" height="250" width="500" style={{
                             'position': 'absolute',
-                            zIndex: 999, 
+                            zIndex: 999,
                             top: 119
                         }}>
                             <line x1="0" y1="0" x2="360" y2="0" style={{
@@ -514,7 +514,7 @@ export const Home = ({ gameState, spinData }) => {
                         </svg>
                         <svg id="payline-2" height="250" width="500" style={{
                             'position': 'absolute',
-                            zIndex: 999, 
+                            zIndex: 999,
                             top: 195
                         }}>
                             <line x1="0" y1="0" x2="360" y2="0" style={{
@@ -524,7 +524,7 @@ export const Home = ({ gameState, spinData }) => {
                         </svg>
                         <svg id="payline-3" height="250" width="500" style={{
                             'position': 'absolute',
-                            zIndex: 999, 
+                            zIndex: 999,
                         }}>
                             <line x1="0" y1="241" x2="360" y2="0" style={{
                                 stroke: 'rgb(255,0,0)',
@@ -534,7 +534,7 @@ export const Home = ({ gameState, spinData }) => {
                     </div>
                 </div>
             </div>
-            
+
             <div className="controls">
                 <div className="bet-control">
                     <div>
