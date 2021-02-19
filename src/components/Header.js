@@ -7,7 +7,13 @@ export const Header = ({ headerData, soundToggle }) => {
         setpaytable(!paytable);
     }
 
-    const toggleSound = () => {
+    const toggleSound = (e) => {
+      console.log({ e })
+      if (!e.target.classList.contains('off')) {
+        e.target.classList.add('off');
+      } else {
+        e.target.classList.remove('off');
+      }
       soundToggle()
     }
 

@@ -280,6 +280,10 @@ input[type="text"] {
   filter: grayscale(100%);
 }
 
+.off {
+    filter: grayscale(1);
+}
+
 .reels-container {
   overflow: hidden;
   margin-bottom: 10px;
