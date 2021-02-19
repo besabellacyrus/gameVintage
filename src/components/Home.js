@@ -2,7 +2,67 @@ import React, { useState, useEffect, useRef } from 'react';
 import useApi from '../api';
 import useSound from 'use-sound';
 import { Header } from './Header';
-import spinSound from '../assets/sounds/Spin.mp3';
+import slotSounds from '../assets/sounds/slotSounds.mp3';
+
+const spriteMap = {
+    ambient: [
+      0,
+      8124.081632653061
+    ],
+    BackgroundSound2: [
+      10000,
+      9273.4693877551
+    ],
+    backgroundsound3: [
+      21000,
+      8124.081632653059
+    ],
+    betmax: [
+      31000,
+      940.4081632653067
+    ],
+    chgBetPerLine: [
+      33000,
+      313.4693877550987
+    ],
+    Cost: [
+      35000,
+      313.4693877550987
+    ],
+    reelStart: [
+      55000,
+      653.0612244897966
+    ],
+    seepays: [
+      59000,
+      287.34693877551365
+    ],
+    win: [
+      61000,
+      1071.020408163264
+    ],
+    Line1: [
+      37000,
+      391.83673469387514
+    ],
+    Line2: [
+      39000,
+      365.714285714283
+    ],
+    Line3: [
+      41000,
+      391.83673469387514
+    ],
+    Line4: [
+      43000,
+      391.83673469387514
+    ],
+    Line5: [
+      45000,
+      391.83673469387514
+    ],
+};
+
 
 export const Home = ({ gameState, spinData }) => {
     const [gamestate, setgamestate] = useState({})
@@ -13,7 +73,9 @@ export const Home = ({ gameState, spinData }) => {
     const [spinning, setspinning] = useState(false);
     const [selectedDenom, setselecteddenom] = useState("");
     const [loading, setloading] = useState(true);
-    const [play] = useSound(spinSound);
+    const [play, { pause, stop, isPlaying } ] = useSound(slotSounds, {
+      sprite: spriteMap
+    });
 
 
     const myStyle1 = {
@@ -53,9 +115,9 @@ export const Home = ({ gameState, spinData }) => {
         transform: 'rotateX(360deg) translateZ(200px)'
     }
 
-    const oneRef = useRef(null);
-    const twoRef = useRef(null);
-    const threeRef = useRef(null);
+    // const oneRef = useRef(null);
+    // const twoRef = useRef(null);
+    // const threeRef = useRef(null);
 
     const ringOne = useRef(null);
     const ringTwo = useRef(null);
@@ -138,12 +200,16 @@ export const Home = ({ gameState, spinData }) => {
 
         switch (paylines) {
             case 1:
+                play({ id: 'Line1' });
+
                 b1.style.display = 'none';
                 b2.style.display = 'none';
                 b3.style.display = 'none';
                 b4.style.display = 'none';
                 break;
             case 2:
+                play({ id: 'Line2' });
+
                 b0.style.display = 'initial'
                 b1.style.display = 'initial'
                 b2.style.display = 'none';
@@ -151,6 +217,8 @@ export const Home = ({ gameState, spinData }) => {
                 b4.style.display = 'none';
                 break;
             case 3:
+                play({ id: 'Line3' });
+
                 b0.style.display = 'initial'
                 b1.style.display = 'initial'
                 b2.style.display = 'initial'
@@ -158,6 +226,8 @@ export const Home = ({ gameState, spinData }) => {
                 b4.style.display = 'none';
                 break;
             case 4:
+                play({ id: 'Line4' });
+
                 b0.style.display = 'initial'
                 b1.style.display = 'initial'
                 b2.style.display = 'initial'
@@ -165,6 +235,8 @@ export const Home = ({ gameState, spinData }) => {
                 b4.style.display = 'none';
                 break;
             case 5:
+                play({ id: 'Line5' });
+
                 b0.style.display = 'initial'
                 b1.style.display = 'initial'
                 b2.style.display = 'initial'
@@ -172,6 +244,8 @@ export const Home = ({ gameState, spinData }) => {
                 b4.style.display = 'initial'
                 break;
             default:
+                play({ id: 'Line1' });
+
                 b0.style.display = 'initial';
                 break;
         }
@@ -190,26 +264,31 @@ export const Home = ({ gameState, spinData }) => {
         const b2 = document.getElementById('payline-1');
         const b3 = document.getElementById('payline-3');
         const b4 = document.getElementById('payline-4');
-
         if (data.PAYLINE0 === "true") {
-            b0.lastChild.style.strokeWidth = 10
-            console.log({ payline0: data.PAYLINE0 })
+          b0.lastChild.style.strokeWidth = 10
+          console.log({ payline0: data.PAYLINE0 })
+          play({ id: "win" });
         }
         if (data.PAYLINE1 === "true") {
-            b1.lastChild.style.strokeWidth = 10
+          b1.lastChild.style.strokeWidth = 10
+          play({ id: "win" });
         }
         if (data.PAYLINE2 === "true") {
-            b2.lastChild.style.strokeWidth = 10
+          b2.lastChild.style.strokeWidth = 10
+          play({ id: "win" });
         }
         if (data.PAYLINE3 === "true") {
-            b3.lastChild.style.strokeWidth = 5
+          b3.lastChild.style.strokeWidth = 5
+          play({ id: "win" });
         }
         if (data.PAYLINE4 === "true") {
-            b4.lastChild.style.strokeWidth = 5
+          b4.lastChild.style.strokeWidth = 5
+          play({ id: "win" });
         }
     }
 
     const betMax = async () => {
+        play({ id: 'betMax' });
         handleBetLine(5);
         spin(5)
     }
@@ -219,7 +298,8 @@ export const Home = ({ gameState, spinData }) => {
     }
 
     const spin = async (betline = 0) => {
-        play();
+        play({ id: 'reelStart' });
+        play({ id: 'ambient' });
         let bets = gamestate.NUMPAYLINES;
 
         if (betline === 5) {
@@ -291,6 +371,14 @@ export const Home = ({ gameState, spinData }) => {
                         }
                     )
                     setspinning(false);
+
+                    if (spind.WON == "0") {
+                      stop();
+                    } else {
+                      setTimeout(() => {
+                        stop();
+                      }, 2000);
+                    }
                 }, 1500);
                 // oneRef.current.innerHTML = wheelsChunks[wheelZero][0]
                 // twoRef.current.innerHTML = wheelsChunks[wheelZero][1]
@@ -329,6 +417,8 @@ export const Home = ({ gameState, spinData }) => {
     }
 
     const denomTogglerPlus = () => {
+        play({ id: 'Cost' });
+
         const selected = denoms.indexOf(selectedDenom);
 
         if (selected <= denoms.length) {
@@ -339,8 +429,8 @@ export const Home = ({ gameState, spinData }) => {
     }
 
     const denomTogglerMinus = () => {
+        play({ id: 'Cost' });
         const selected = denoms.indexOf(selectedDenom);
-        console.log({ ssss: (selected - 1), selected, denoms, sssd: denoms.length })
 
         if (selected <= denoms.length) {
             if (denoms[selected - 1]) {

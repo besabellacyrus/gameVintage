@@ -1,11 +1,20 @@
 import React, { useState } from 'react'
+import useSound from 'use-sound';
+import slotSounds from '../assets/sounds/slotSounds.mp3';
 
+const spriteMap = {
+    seepays: [
+      59000,
+      287.34693877551365
+    ]
+};
 export const Header = ({ headerData }) => {
-    const [paytable, setpaytable] = useState(false); 
+    const [paytable, setpaytable] = useState(false);
+    const [play, { stop, isPlaying } ] = useSound(slotSounds, { sprite: spriteMap });
 
-    const showPaytable = () => { 
-        setpaytable(!paytable)
-        console.log('paytable', paytable)
+    const showPaytable = () => {
+        setpaytable(!paytable);
+        play({ id: 'seepays' });
     }
 
     return (
@@ -48,7 +57,7 @@ export const Header = ({ headerData }) => {
                         <p>BET</p>
                     </div>
                 </div>
-                <div> 
+                <div>
                     <div className="icon-wrap">
                         <div className="icon chip-icon"></div>
                         <input type="text" value={ headerData.WON ? headerData.WON : "" } disabled readOnly />
@@ -58,7 +67,7 @@ export const Header = ({ headerData }) => {
                         <p>WIN</p>
                     </div>
                 </div>
-            </div> 
+            </div>
         </div>
         {
             paytable && (
