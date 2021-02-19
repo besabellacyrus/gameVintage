@@ -1,20 +1,14 @@
-import React, { useState } from 'react'
-import useSound from 'use-sound';
-import slotSounds from '../assets/sounds/slotSounds.mp3';
+import React, { useState, useEffect } from 'react'
 
-const spriteMap = {
-    seepays: [
-      59000,
-      287.34693877551365
-    ]
-};
-export const Header = ({ headerData }) => {
+export const Header = ({ headerData, soundToggle }) => {
     const [paytable, setpaytable] = useState(false);
-    const [play, { stop, isPlaying } ] = useSound(slotSounds, { sprite: spriteMap });
 
     const showPaytable = () => {
         setpaytable(!paytable);
-        play({ id: 'seepays' });
+    }
+
+    const toggleSound = () => {
+      soundToggle()
     }
 
     return (
@@ -30,7 +24,7 @@ export const Header = ({ headerData }) => {
                 </div>
                 <div className="topbar-icons">
                     <div className="app-icon settings-icon"></div>
-                    <div className="app-icon audio-icon"></div>
+                    <div onClick={toggleSound} className="app-icon audio-icon"></div>
                     <div className="app-icon money-icon"></div>
                     <div className="app-icon help-icon"></div>
                     <div className="app-icon close-icon"></div>
