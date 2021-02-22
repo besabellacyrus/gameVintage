@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react'
 
-export const Header = ({ headerData, soundToggle }) => {
+export const Header = ({ headerData, soundToggle, clickPaytable }) => {
     const [paytable, setpaytable] = useState(false);
 
     const showPaytable = () => {
         setpaytable(!paytable);
+        clickPaytable()
     }
 
     const toggleSound = (e) => {
-      console.log({ e })
       if (!e.target.classList.contains('off')) {
         e.target.classList.add('off');
       } else {
         e.target.classList.remove('off');
       }
-      soundToggle()
+      soundToggle();
     }
 
     return (

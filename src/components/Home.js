@@ -445,10 +445,15 @@ export const Home = ({ gameState, spinData }) => {
        setVolume(volume === 0 ? 1 : 0);
     }
 
+    const clickPaytable = () => {
+       play({ id: 'seepays' })
+    }
+
+
     return (
         <>
         <div className="home">
-            <Header headerData={gamestate} soundToggle={e => soundToggle(e)}></Header>
+            <Header headerData={gamestate} clickPaytable={clickPaytable} soundToggle={e => soundToggle(e)}></Header>
             <div className="app-logo-container">
                 <div className="app-logo"></div>
             </div>
