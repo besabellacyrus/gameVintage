@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import { formatMoney, parseNumbers } from '../utils/numbers';
 
 export const Header = ({ headerData, soundToggle, clickPaytable }) => {
     const [paytable, setpaytable] = useState(false);
@@ -41,6 +42,7 @@ export const Header = ({ headerData, soundToggle, clickPaytable }) => {
                     <div className="icon-wrap">
                         <div className="icon coins-icon"></div>
                         <input type="text" value={ headerData.CASHVALUE ? (headerData.CASHVALUE * 0.25).toFixed(2).toLocaleString('en-US', {maximumFractionDigits:2}) : "" } disabled readOnly />
+                        {/* <input type="text" value={ headerData.CASHVALUE ?  formatMoney(headerData.CASHVALUE * 0.25) : "" } disabled readOnly /> */}
                     </div>
                     <div className="label-container">
                         <span></span>

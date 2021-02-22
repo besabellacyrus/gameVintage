@@ -4,8 +4,7 @@ import useSound from 'use-sound';
 import { Header } from './Header';
 import slotSounds from '../assets/sounds/slotSounds.mp3';
 
-
-export const Home = ({ gameState, spinData }) => {
+export const Home = ({ gameState, spinData, processError }) => {
     const spriteMap = {
         ambient: [
           0,
@@ -299,97 +298,115 @@ export const Home = ({ gameState, spinData }) => {
     }
 
     const spin = async (betline = 0) => {
-        play({ id: 'reelStart' });
-        play({ id: 'ambient' });
-        let bets = gamestate.NUMPAYLINES;
+       try {
 
-        if (betline === 5) {
-            bets = betline
-        }
+          play({ id: 'reelStart' });
+          play({ id: 'ambient' });
+          let bets = gamestate.NUMPAYLINES;
 
-        const b0 = document.getElementById('payline-0');
-        const b1 = document.getElementById('payline-1');
-        const b2 = document.getElementById('payline-2');
-        const b3 = document.getElementById('payline-3');
-        const b4 = document.getElementById('payline-4');
+          if (betline === 5) {
+              bets = betline
+          }
 
-        b0.lastChild.style.strokeWidth = 3
-        b1.lastChild.style.strokeWidth = 3
-        b2.lastChild.style.strokeWidth = 3
-        b3.lastChild.style.strokeWidth = 2
-        b4.lastChild.style.strokeWidth = 2
+          const b0 = document.getElementById('payline-0');
+          const b1 = document.getElementById('payline-1');
+          const b2 = document.getElementById('payline-2');
+          const b3 = document.getElementById('payline-3');
+          const b4 = document.getElementById('payline-4');
 
-        const rOne = document.querySelector('.poster p');
-        // run the wheel
-        ringOne.current.style.animationDuration = '0.3s';
-        ringTwo.current.style.animationDuration = '0.3s';
-        ringThree.current.style.animationDuration = '0.3s';
-        // ringOne.current.style.filter = 'blur(5px)';
-        rOne.style.filter = 'blur(45px)';
-        console.log({ gameStateDenom:  gamestate, rOne})
-        setspinning(true);
-        const spind  = await api.casinoServlet({
-            BETLINES: bets,
-            USERNUM: gamestate.USERNUM,
-            GAMETYPE: 'SL',
-            DENOM: selectedDenom,
-            USERID: gamestate.USERID,
-            GAMEID: gamestate.GAMEID,
-            TRANTYPE: 'SPIN',
-            BET: bets,
-            LASTWAGERTYPE: '1'
-        })
-        const spinWheels = spind.WHEELVALUES
-        const wheelZero = spind.WHEEL0
-        const wheelOne = spind.WHEEL1
-        const wheelTwo = spind.WHEEL2
+          b0.lastChild.style.strokeWidth = 3
+          b1.lastChild.style.strokeWidth = 3
+          b2.lastChild.style.strokeWidth = 3
+          b3.lastChild.style.strokeWidth = 2
+          b4.lastChild.style.strokeWidth = 2
 
-        let i,j,temparray,chunk = 3;
-        let wheelsChunks = []
-        for (i=0,j=spinWheels.length; i<j; i+=chunk) {
-            temparray = spinWheels.slice(i,i+chunk);
-            wheelsChunks.push(temparray)
-        }
-        console.log({ wheelsChunks })
-        if (wheelTwo) {
-            setTimeout(() => {
-                rOne.style.filter = 'initial';
-                setTimeout(() => {
-                    ringOne.current.style.animationDuration = 'initial';
-                }, 500);
-                setTimeout(() => {
-                    ringTwo.current.style.animationDuration = 'initial';
-                }, 1000);
-                setTimeout(() => {
-                    ringThree.current.style.animationDuration = 'initial';
-                    highlightBetline(spind);
-                    setgamestate(
-                        {
-                            ...gameState,
-                            WON: spind.WON,
-                            NUMPAYLINES: bets,
-                            CASHVALUE: spind.CASHVALUE
-                        }
-                    )
-                    setspinning(false);
+          const rOne = document.querySelector('.poster p');
+          // run the wheel
+          ringOne.current.style.animationDuration = '0.3s';
+          ringTwo.current.style.animationDuration = '0.3s';
+          ringThree.current.style.animationDuration = '0.3s';
+          // ringOne.current.style.filter = 'blur(5px)';
+          rOne.style.filter = 'blur(45px)';
+          console.log({ gameStateDenom:  gamestate, rOne})
+          setspinning(true);
+          const spind  = await api.casinoServlet({
+              BETLINES: bets,
+              USERNUM: gamestate.USERNUM,
+              GAMETYPE: 'SL',
+              DENOM: selectedDenom,
+              USERID: gamestate.USERID,
+              GAMEID: gamestate.GAMEID,
+              TRANTYPE: 'SPIN',
+              BET: bets,
+              LASTWAGERTYPE: '1'
+          })
+          const spinWheels = spind.WHEELVALUES
+          const wheelZero = spind.WHEEL0
+          const wheelOne = spind.WHEEL1
+          const wheelTwo = spind.WHEEL2
 
-                    if (spind.WON == "0") {
-                      stop();
-                    } else {
-                      setTimeout(() => {
+          let i,j,temparray,chunk = 3;
+          let wheelsChunks = []
+          for (i=0,j=spinWheels.length; i<j; i+=chunk) {
+              temparray = spinWheels.slice(i,i+chunk);
+              wheelsChunks.push(temparray)
+          }
+          console.log({ wheelsChunks })
+          if (wheelTwo) {
+              setTimeout(() => {
+                  rOne.style.filter = 'initial';
+                  setTimeout(() => {
+                      ringOne.current.style.animationDuration = 'initial';
+                  }, 500);
+                  setTimeout(() => {
+                      ringTwo.current.style.animationDuration = 'initial';
+                  }, 1000);
+                  setTimeout(() => {
+                      ringThree.current.style.animationDuration = 'initial';
+                      highlightBetline(spind);
+                      setgamestate(
+                          {
+                              ...gameState,
+                              WON: spind.WON,
+                              NUMPAYLINES: bets,
+                              CASHVALUE: spind.CASHVALUE
+                          }
+                      )
+                      setspinning(false);
+
+                      if (spind.WON == "0") {
                         stop();
-                      }, 2000);
-                    }
-                }, 1500);
-                // oneRef.current.innerHTML = wheelsChunks[wheelZero][0]
-                // twoRef.current.innerHTML = wheelsChunks[wheelZero][1]
-                // threeRef.current.innerHTML = wheelsChunks[wheelZero][2]
-            }, 1000);
-        }
-        setwheelZero(wheelsChunks[wheelZero])
-        setwheelOne(wheelsChunks[wheelOne])
-        setwheelTwo(wheelsChunks[wheelTwo])
-        console.log({ clickedSpin: spind })
+                      } else {
+                        setTimeout(() => {
+                          stop();
+                        }, 2000);
+                      }
+                  }, 1500);
+              }, 1000);
+          }
+          setwheelZero(wheelsChunks[wheelZero])
+          setwheelOne(wheelsChunks[wheelOne])
+          setwheelTwo(wheelsChunks[wheelTwo])
+          console.log({ clickedSpin: spind })
+
+       } catch (error) {
+          console.log({ clickedSpinErr: error })
+          let errData
+          if (error.message) {
+            errData = {
+              errorTitle: 'Network',
+              errorContent: error.message
+            }
+          } else {
+
+            errData = {
+              errorTitle: 'Error',
+              errorContent: 'Something went wrong.'
+            }
+          }
+          processError(errData)
+
+       }
     }
 
     const setReels = (data) => {

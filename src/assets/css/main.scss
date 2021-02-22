@@ -46,7 +46,7 @@ main {
 }
 
 #paytable-closed {
-  background-image: url("../assets/img/dropdown-closed.png");
+  background-image: url("../img/dropdown-closed.png");
   background-repeat: no-repeat;
   background-size: contain;
   height: 35px;
@@ -56,7 +56,7 @@ main {
   cursor: pointer;
 }
 #paytable-open {
-  background-image: url("../assets/img/dropdown-open.png");
+  background-image: url("../img/dropdown-open.png");
   background-repeat: no-repeat;
   background-size: contain;
   height: 35px;
@@ -123,11 +123,11 @@ main {
 }
 
 .bet-one {
-  background-image: url("../assets/img/btn-bet-one.png");
+  background-image: url("../img/btn-bet-one.png");
   cursor: pointer;
 }
 .bet-max {
-  background-image: url("../assets/img/btn-bet-max.png");
+  background-image: url("../img/btn-bet-max.png");
   cursor: pointer;
 }
 .btn-spin {
@@ -178,23 +178,23 @@ input[type="text"] {
   background-size: contain;
   background-repeat: no-repeat;
   &.settings-icon {
-    background-image: url("../assets/img/topbar-settings.png");
+    background-image: url("../img/topbar-settings.png");
   }
   &.audio-icon {
-    background-image: url("../assets/img/topbar-sound.png");
+    background-image: url("../img/topbar-sound.png");
   }
   &.money-icon {
-    background-image: url("../assets/img/topbar-money.png");
+    background-image: url("../img/topbar-money.png");
   }
   &.help-icon {
-    background-image: url("../assets/img/topbar-help.png");
+    background-image: url("../img/topbar-help.png");
   }
   &.close-icon {
-    background-image: url("../assets/img/topbar-close.png");
+    background-image: url("../img/topbar-close.png");
   }
 }
 .plus-icon {
-  background-image: url("../assets/img/btn-arrow-plus.png");
+  background-image: url("../img/btn-arrow-plus.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   height: 42px;
@@ -202,7 +202,7 @@ input[type="text"] {
   cursor: pointer;
 }
 .minus-icon {
-  background-image: url("../assets/img/btn-arrow-minus.png");
+  background-image: url("../img/btn-arrow-minus.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   height: 42px;
@@ -215,21 +215,21 @@ input[type="text"] {
   justify-content: center;
   align-items: center;
   .coins-icon {
-    background-image: url("../assets/img/icon-coins.png");
+    background-image: url("../img/icon-coins.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 14px;
     width: 14px;
   }
   .chip-icon {
-    background-image: url("../assets/img/icon-chip.png");
+    background-image: url("../img/icon-chip.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 17px;
     width: 17px;
   }
   .stars-icon {
-    background-image: url("../assets/img/icon-stars.png");
+    background-image: url("../img/icon-stars.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
     height: 15px;
@@ -256,7 +256,7 @@ input[type="text"] {
   .paytable {
     height: 24rem;
     background-color: #ffff;
-    background-image: url("../assets/img/newPaytable.jpg");
+    background-image: url("../img/newPaytable.jpg");
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
@@ -268,7 +268,7 @@ input[type="text"] {
   align-items: center;
   height: 9rem;
   .app-logo {
-    background-image: url("../assets/img/logoicon-00.png");
+    background-image: url("../img/logoicon-00.png");
     background-repeat: no-repeat;
     background-size: contain;
     height: 10rem;
@@ -329,53 +329,53 @@ input[type="text"] {
   color: rgba(0, 0, 0, 1);
   display: grid;
   align-items: center;
-  // background-image: url("../assets/img/Tablet_symbolsprite.png");
+  // background-image: url("../img/Tablet_symbolsprite.png");
 }
 .a {
   // background-position: -21px -15px;
-  // background-image: url("../assets/img/reel-7-a.png");
+  // background-image: url("../img/reel-7-a.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .b {
   // background-position: -450px -170px;
-  background-image: url("../assets/img/reel-7-b.png");
+  background-image: url("../img/reel-7-b.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .c {
   // background-position: -311px -161px;
-  background-image: url("../assets/img/reel-bar-01.png");
+  background-image: url("../img/reel-bar-01.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .d {
   // background-position: -166px -309px;
-  background-image: url("../assets/img/reel-bar-02.png");
+  background-image: url("../img/reel-bar-02.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .e {
   // background-position: -18px -307px;
-  background-image: url("../assets/img/reel-bar-03.png");
+  background-image: url("../img/reel-bar-03.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .f {
   // background-position: -310px -305px;
-  background-image: url("../assets/img/reel-cherry.png");
+  background-image: url("../img/reel-cherry.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .g {
   // background-position: -22px -457px;
-  background-image: url("../assets/img/reel-logoicon.png");
+  background-image: url("../img/reel-logoicon.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
 .h {
   // background-position: -165px -17px;
-  background-image: url("../assets/img/reel-7-a.png");
+  background-image: url("../img/reel-7-a.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
 }
